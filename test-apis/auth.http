@@ -1,0 +1,122 @@
+### HRM API - Authentication Endpoints
+### Base URL
+@baseUrl = http://localhost:4000
+@contentType = application/json
+
+### 1. Register a new user
+POST {{baseUrl}}/auth/register
+Content-Type: {{contentType}}
+
+{
+  "email": "john.doe@example.com",
+  "username": "john_doe",
+  "password": "Test123456"
+}
+
+### 2. Login with credentials (sets cookies automatically)
+POST {{baseUrl}}/auth/login
+Content-Type: {{contentType}}
+
+{
+  "email": "john.doe@example.com",
+  "password": "Test123456"
+}
+
+### 3. Get current user profile (uses cookie automatically)
+GET {{baseUrl}}/auth/me
+
+### 4. Refresh tokens (uses refresh_token cookie)
+POST {{baseUrl}}/auth/refresh
+
+### 5. Change Password (requires authentication)
+POST {{baseUrl}}/auth/change-password
+Content-Type: {{contentType}}
+
+{
+  "currentPassword": "Test123456",
+  "newPassword": "NewPassword123",
+  "confirmPassword": "NewPassword123"
+}
+
+### 6. Logout (clears cookies)
+POST {{baseUrl}}/auth/logout
+
+### 7. Test with Bearer Token (if not using cookies)
+GET {{baseUrl}}/auth/me
+Authorization: Bearer YOUR_ACCESS_TOKEN_HERE
+
+###############################################
+### Additional Test Cases
+###############################################
+
+### Register with existing email (should fail with 409)
+POST {{baseUrl}}/auth/register
+Content-Type: {{contentType}}
+
+{
+  "email": "john.doe@example.com",
+  "username": "another_user",
+  "password": "Test123456"
+}
+
+### Login with wrong password (should fail with 401)
+POST {{baseUrl}}/auth/login
+Content-Type: {{contentType}}
+
+{
+  "email": "john.doe@example.com",
+  "password": "WrongPassword123"
+}
+
+### Register with weak password (should fail with 400)
+POST {{baseUrl}}/auth/register
+Content-Type: {{contentType}}
+
+{
+  "email": "test@example.com",
+  "username": "test_user",
+  "password": "weak"
+}
+
+### Access protected route without authentication (should fail with 401)
+GET {{baseUrl}}/auth/me
+
+### Change password with wrong current password (should fail with 401)
+POST {{baseUrl}}/auth/change-password
+Content-Type: {{contentType}}
+
+{
+  "currentPassword": "WrongPassword123",
+  "newPassword": "NewPassword123",
+  "confirmPassword": "NewPassword123"
+}
+
+### Change password with mismatched confirmation (should fail with 409)
+POST {{baseUrl}}/auth/change-password
+Content-Type: {{contentType}}
+
+{
+  "currentPassword": "Test123456",
+  "newPassword": "NewPassword123",
+  "confirmPassword": "DifferentPassword123"
+}
+
+### Change password with same password (should fail with 409)
+POST {{baseUrl}}/auth/change-password
+Content-Type: {{contentType}}
+
+{
+  "currentPassword": "Test123456",
+  "newPassword": "Test123456",
+  "confirmPassword": "Test123456"
+}
+
+### Change password with weak new password (should fail with 400)
+POST {{baseUrl}}/auth/change-password
+Content-Type: {{contentType}}
+
+{
+  "currentPassword": "Test123456",
+  "newPassword": "weak",
+  "confirmPassword": "weak"
+}
