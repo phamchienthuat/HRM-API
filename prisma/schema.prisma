@@ -29,18 +29,125 @@ model User {
 }
 
 model UserTokens {
-  id        Int      @id @default(autoincrement())
-  userId    Int
-  refreshToken  String   @unique
-  userAgent String // Browser or app info
-  ipAddress String // IP address of the user
-  deviceInfo String // Additional device information
-  lastUsedAt DateTime @default(now()) // Last time the token was used
-  expiresAt DateTime // Expiration date of the token
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id           Int      @id @default(autoincrement())
+  userId       Int
+  refreshToken String   @unique
+  userAgent    String // Browser or app info
+  ipAddress    String // IP address of the user
+  deviceInfo   String // Additional device information
+  lastUsedAt   DateTime @default(now()) // Last time the token was used
+  expiresAt    DateTime // Expiration date of the token
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId])
+}
+
+// Nhân sự
+// model Employee {
+//   id                  Int       @id @default(autoincrement())
+//   code                String    @unique @db.VarChar(10)
+//   name                String    @db.VarChar(100)
+//   email               String    @unique @db.VarChar(100)
+//   emailCompany        String?   @unique @db.VarChar(100)
+//   dateOfBirth         DateTime? @db.Date
+//   phoneNumber         String?   @db.VarChar(15)
+//   gender              String?   @db.VarChar(10)
+//   departmentId        Int?
+//   positionId          Int?
+//   facebook            String?   @db.VarChar(255)
+//   linkedin            String?   @db.VarChar(255)
+//   sizeOfClothes       String?   @db.VarChar(10) /// Size quần áo
+//   nationality         String?   @db.VarChar(100) /// Quốc tịch
+//   religion            String?   @db.VarChar(100) /// Tôn giáo
+//   onboardDate         DateTime? @db.Date /// Ngày vào công ty
+//   offboardDate        DateTime? @db.Date /// Ngày nghỉ việc
+//   status              String    @db.VarChar(20) /// e.g., Active, Inactive, On Leave
+//   nationalId          String?   @db.VarChar(20) /// Số CMND/CCCD
+//   nationalCreatedDate DateTime? @db.Date /// Ngày cấp CMND/CCCD
+//   nationalPlace       String?   @db.VarChar(100) /// Nơi cấp CMND/CCCD
+//   maritalStatus       String?   @db.VarChar(20) /// e.g., Single, Married
+//   emergencyContact    String?   @db.VarChar(20) /// Số điện thoại liên hệ khẩn cấp
+//   baseSalary          Float? /// Lương cơ bản
+//   allowance           Float? /// Phụ cấp
+//   bankAccount         String?   @db.VarChar(30) /// Số tài khoản ngân hàng
+//   bankName            String?   @db.VarChar(150) /// Tên ngân hàng
+//   bankBranch          String?   @db.VarChar(255) /// Chi nhánh ngân hàng
+//   createdAt           DateTime  @default(now())
+//   updatedAt           DateTime  @updatedAt
+//   createdBy           Int
+//   updatedBy           Int?
+
+//   educations  EmployeeEducation[]
+//   experiences EmployeeExperience[]
+// }
+
+// // Trình độ văn hóa
+// model EmployeeEducation {
+//   id             Int      @id @default(autoincrement())
+//   employeeId     Int
+//   degree         String   @db.VarChar(100) /// Bằng cấp
+//   institution    String   @db.VarChar(255) /// Tên trường đào tạo
+//   major          String   @db.VarChar(100) /// chuyên ngành
+//   graduationYear Int? /// Năm tốt nghiệp
+//   createdAt      DateTime @default(now())
+//   updatedAt      DateTime @updatedAt
+//   createdBy      Int
+//   updatedBy      Int?
+
+//   employee Employee @relation(fields: [employeeId], references: [id], onDelete: Cascade)
+
+//   @@index([employeeId])
+// }
+
+// // Kinh nghiệm làm việc 
+// model EmployeeExperience {
+//   id               Int       @id @default(autoincrement())
+//   employeeId       Int
+//   companyName      String    @db.VarChar(255) /// Tên công ty
+//   position         String    @db.VarChar(100) /// Vị trí công việc
+//   startDate        DateTime  @db.Date /// Ngày bắt đầu
+//   endDate          DateTime? @db.Date /// Ngày kết thúc
+//   responsibilities String    @db.Text /// Mô tả công việc và trách nhiệm
+//   createdAt        DateTime  @default(now())
+//   updatedAt        DateTime  @updatedAt
+//   createdBy        Int
+//   updatedBy        Int?
+
+//   employee Employee @relation(fields: [employeeId], references: [id], onDelete: Cascade)
+
+//   @@index([employeeId])
+// }
+
+model Provinde {
+  id                  Int      @id @default(autoincrement())
+  name                String   @db.VarChar(100)
+  code                String   @unique @db.VarChar(10)
+  administrativeLevel String   @db.VarChar(50)
+  decree             String   @db.VarChar(100)
+  createdAt           DateTime? @default(now())
+  updatedAt           DateTime? @updatedAt
+  createdBy           Int?
+  updatedBy           Int?
+
+  commune Communes[]
+}
+
+model Communes {
+  id                  Int      @id @default(autoincrement())
+  name                String   @db.VarChar(100)
+  code                String   @unique @db.VarChar(10)
+  provinceId          Int
+  administrativeLevel String   @db.VarChar(50) // e.g., Commune, Ward
+  decree             String   @db.VarChar(100)
+  createdAt           DateTime? @default(now())
+  updatedAt           DateTime? @updatedAt
+  createdBy           Int?
+  updatedBy           Int?
+
+  province Provinde @relation(fields: [provinceId], references: [id], onDelete: Cascade)
+
+  @@index([provinceId])
 }
