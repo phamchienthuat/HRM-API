@@ -1,0 +1,16 @@
+services:
+  postgres:
+    image: postgres:18
+    container_name: pg18
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: secret123
+      POSTGRES_DB: hrm_db
+    volumes:
+      - pg18_data:/var/lib/postgresql/data
+    restart: unless-stopped
+
+volumes:
+  pg18_data:
