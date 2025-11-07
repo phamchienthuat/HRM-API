@@ -49,7 +49,8 @@ model UserTokens {
 model Employee {
   id                         Int       @id @default(autoincrement())
   code                       String    @unique @db.VarChar(10)
-  name                       String    @db.VarChar(100)
+  firstName                       String    @db.VarChar(100)
+  lastName                       String    @db.VarChar(100)
   email                      String    @unique @db.VarChar(100)
   emailCompany               String?   @unique @db.VarChar(100)
   dateOfBirth                DateTime? @db.Date
@@ -70,11 +71,14 @@ model Employee {
   bankAccount                String?   @db.VarChar(30) /// Số tài khoản ngân hàng
   bankName                   String?   @db.VarChar(150) /// Tên ngân hàng
   bankBranch                 String?   @db.VarChar(255) /// Chi nhánh ngân hàng
+  hometownCommuneId         Int? /// Quê quán - xã/phường
+  hometownProvinceId        Int? /// Quê quán - tỉnh/thành phố
+  hometownDetail            String?   @db.VarChar(255) /// Quê quán - chi tiết
   temporaryAddressCommuneId  Int? /// Địa chỉ tạm trú - xã/phường
-  temporaryAddressProvindeId Int? /// Địa chỉ tạm trú - tỉnh/thành phố
+  temporaryAddressProvinceId Int? /// Địa chỉ tạm trú - tỉnh/thành phố
   temporaryAddressDetail     String?   @db.VarChar(255) /// Địa chỉ tạm trú - chi tiết
   permanentAddressCommuneId  Int? /// Địa chỉ thường trú - xã/phường
-  permanentAddressProvindeId Int? /// Địa chỉ thường trú - tỉnh/thành phố
+  permanentAddressProvinceId Int? /// Địa chỉ thường trú - tỉnh/thành phố
   permanentAddressDetail     String?   @db.VarChar(255) /// Địa chỉ thường trú - chi tiết
   createdAt                  DateTime  @default(now())
   updatedAt                  DateTime  @updatedAt
